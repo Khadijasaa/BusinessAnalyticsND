@@ -1,0 +1,73 @@
+
+	Q1
+What are the top 10 best-selling genres?
+SELECT 
+g.Name AS Genre, 
+SUM(il.Quantity*t.UnitPrice) AS TotalSold
+FROM InvoiceLine il
+JOIN Track t
+ON il.TrackId = t.TrackId
+JOIN Genre G 
+ON t.GenreId = g.GenreId
+JOIN Album al 
+ON al.AlbumId = t.AlbumId
+GROUP BY  g.Name
+ORDER BY TotalSold DESC
+LIMIT 10;
+
+///////////////////////////////////////////////////////////
+
+Q2
+What is the total invoice by country btween 2012-2013
+
+1) 2012
+SELECT 
+  c.Country,
+  SUM(i.Total) AS TotalInvoice
+FROM Customer c
+JOIN Invoice i ON c.CustomerId = i.CustomerId
+WHERE i.InvoiceDate like "2012%"
+GROUP BY c.Country
+ORDER BY TotalInvoice DESC;
+
+2) 2013 
+SELECT 
+  c.Country,
+  SUM(i.Total) AS TotalInvoice
+FROM Customer c
+JOIN Invoice i ON c.CustomerId = i.CustomerId
+WHERE i.InvoiceDate like "2013%"
+GROUP BY c.Country
+ORDER BY TotalInvoice DESC;
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+ Q3
+
+the highest-selling albums
+
+SELECT
+  a.Title AS album_name,
+  SUM(il.Quantity*t.UnitPrice) AS total_album_sales
+FROM Invoice i
+JOIN InvoiceLine il ON i.InvoiceId = il.InvoiceId
+JOIN Track t ON il.TrackId = t.TrackId
+JOIN Album a ON t.AlbumId = a.AlbumId
+GROUP BY  a.AlbumId
+ORDER BY total_album_sales DESC;
+
+///////////////////////////////////
+Q4
+
+What is the total sales generated from each media type?
+SELECT
+  mt.Name AS media_type,
+  SUM(il.Quantity * il.UnitPrice) AS total_revenue
+FROM InvoiceLine il
+JOIN Track t ON il.TrackId = t.TrackId
+JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId
+GROUP BY mt.Name
+ORDER BY total_revenue DESC;
+
+
